@@ -1,12 +1,10 @@
 import jsonlines
-import os
-#import langdetect
 import re
 import ftlangdetect
 
 from tqdm import tqdm
 
-from typing import TextIO, List, Dict, Any, Callable
+from typing import List, Dict, Any, Callable
 
     
 def clean_up_abstracts(abstracts: List[str]) -> List[str]:

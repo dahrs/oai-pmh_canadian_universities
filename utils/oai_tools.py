@@ -41,7 +41,6 @@ oai_etdms_reader = MetadataReader(
         'rights':      ('textList', 'etdms:thesis/etdms:rights/text()'),
         'subject':     ('textList', 'etdms:thesis/etdms:subject/text()'),
         'abstract':    ('textList', 'etdms:thesis/etdms:description/text()'),
-        # 'degree':    ('textList', 'etdms:thesis/etdms:degree/text()'),
         'degree_name':    ('textList', 'etdms:thesis/etdms:degree/etdms:name/text()'),
         'degree_level':    ('textList', 'etdms:thesis/etdms:degree/etdms:level/text()'),
         'degree_grantor':    ('textList', 'etdms:thesis/etdms:degree/etdms:grantor/text()'),
@@ -77,12 +76,8 @@ fields={
     'publisher': ('textList', 'didl:DIDL/didl:Item/didl:Descriptor/didl:Statement/oai_dc:dc/dc:publisher/text()'),
     'contributor': ('textList', 'didl:DIDL/didl:Item/didl:Descriptor/didl:Statement/oai_dc:dc/dc:contributor/text()'),
     'date': ('textList', 'didl:DIDL/didl:DIDLInfo/dcterms:created/text()'),
-    # 'format': ('textList', 'didl:DIDL/didl:Item/didl:Descriptor/didl:Statement/oai_dc:dc/dc:format/text()'),
-    # 'source': ('textList', 'didl:DIDL/didl:Item/didl:Descriptor/didl:Statement/oai_dc:dc/dc:source/text()'),
     'language': ('textList', 'didl:DIDL/didl:Item/didl:Descriptor/didl:Statement/oai_dc:dc/dc:language/text()'),
     'relation': ('textList', 'didl:DIDL/didl:Item/didl:Descriptor/didl:Statement/oai_dc:dc/dc:relation/text()'),
-    # 'coverage': ('textList', 'didl:DIDL/didl:Item/didl:Descriptor/didl:Statement/oai_dc:dc/dc:coverage/text()'),
-    # 'rights': ('textList', 'didl:DIDL/didl:Item/didl:Descriptor/didl:Statement/oai_dc:dc/dc:rights/text()'),
     'subject': ('textList', 'didl:DIDL/didl:Item/didl:Descriptor/didl:Statement/oai_dc:dc/dc:subject/text()'),
     'description': ('textList', 'didl:DIDL/didl:Item/didl:Descriptor/didl:Statement/oai_dc:dc/dc:description/text()')},
     namespaces={
@@ -119,16 +114,6 @@ oai_dc_reader = MetadataReader(
         'identifier':  ('textList', 'oai_dc:dc/dc:identifier/text()'),
         'title':       ('textList', 'oai_dc:dc/dc:title/text()'),
         'type':        ('textList', 'oai_dc:dc/dc:type/text()'),
-        #'creator':     ('textList', 'oai_dc:dc/dc:creator/text()'),
-        #'publisher':   ('textList', 'oai_dc:dc/dc:publisher/text()'),
-        #'contributor': ('textList', 'oai_dc:dc/dc:contributor/text()'),
-        #'date':        ('textList', 'oai_dc:dc/dc:date/text()'),
-        #'format':      ('textList', 'oai_dc:dc/dc:format/text()'),
-        #'source':      ('textList', 'oai_dc:dc/dc:source/text()'),
-        #'language':    ('textList', 'oai_dc:dc/dc:language/text()'),
-        #'relation':    ('textList', 'oai_dc:dc/dc:relation/text()'),
-        #'coverage':    ('textList', 'oai_dc:dc/dc:coverage/text()'),
-        #'rights':      ('textList', 'oai_dc:dc/dc:rights/text()'),
         'subject':     ('textList', 'oai_dc:dc/dc:subject/text()'),
         'abstract':    ('textList', 'oai_dc:dc/dc:description/text()')},
     namespaces={
@@ -179,7 +164,6 @@ namespaces={
 'mods': 'http://www.loc.gov/mods/v3'
 }
 )
-# 'supervisor': ('textList', 'mets:mets/mets:dmdSec/
 
 mods_reader = MetadataReader(
 fields={

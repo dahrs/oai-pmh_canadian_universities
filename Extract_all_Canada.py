@@ -1,20 +1,13 @@
-import re
 import os.path
 import argparse
-import requests
 import jsonlines
 from tqdm import tqdm
-from bs4 import BeautifulSoup
-from collections import Counter
 from oaipmh.client import Client
-from environment import overwrite_check
 from utils.oai_tools import get_registry
 from utils.environment import url_2_path_default
-from utils.environment import make_readme_default
-from oaipmh.metadata import MetadataRegistry
 
 
-def extract_metadatas_formats(url: str) -> None:
+def extract_metadatas_formats(url: str) -> list:
     print("Harvesting: " + url)
     registry = get_registry()
     client = Client(url, registry)
@@ -46,7 +39,7 @@ mapping = {'urn:mpeg:mpeg21:2002:02-DIDL-NS http://standards.iso.org/ittf/Public
 reverse_mapping = {item: key for key, item in mapping.items()}
 
 
-def main(out_path:str, overwrite: bool = False):
+def main(out_path: str):
     a_list = ["https://mru.arcabc.ca/oai2",
               "https://era.library.ualberta.ca/oai",
               "https://prism.ucalgary.ca/oai/request",
@@ -111,21 +104,9 @@ def main(out_path:str, overwrite: bool = False):
         output_path = url_2_path_default(out_path, oai_url)
         if not os.path.isfile(output_path):
             extract(oai_url, output_file=output_path)
-        all_metadatas_formats=extract_metadatas_formats(oai_url)
-
+        all_metadatas_formats = extract_metadatas_formats(oai_url)
         all_mm.extend(all_metadatas_formats)
-        # Check all metadatas
-        for name, namespace, schema in all_metadatas_formats:
-            print(name, namespace, schema)
-
-        for mm in all_metadatas_formats:
-            if mm in ['didl']:
-                print("WARNING, CHECK EXTRACTION, CURRENT DIDL SCHEMA IS NOT PURE DIDL")
-            if overwrite or overwrite_check(output_path, oai_url, mm):
-                extract(oai_url, output_file=f"{output_path}.{mm}.jsonl", metadata_format=mm)
-                make_readme_default(output_path, oai_url, mm)
-    print(Counter(all_mm))
-    print(len(Counter(all_mm)))
+    print('Successfully extracted')
 
 
 if __name__ == '__main__':
@@ -137,4 +118,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
     args = args.__dict__
 
-    main(args['out_path'], overwrite=False)
+    main(args['out_path'])
