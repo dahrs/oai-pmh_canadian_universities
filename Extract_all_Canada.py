@@ -2,8 +2,11 @@ import os.path
 import argparse
 import jsonlines
 from tqdm import tqdm
-from oaipmh.client import Client
+from oaipmh.error import BadVerbError
+from http.client import IncompleteRead
+from oaipmh.client import Client, Error
 from utils.oai_tools import get_registry
+from urllib.error import HTTPError, URLError
 from utils.environment import url_2_path_default
 
 
@@ -12,8 +15,12 @@ def extract_metadatas_formats(url: str) -> list:
     registry = get_registry()
     client = Client(url, registry)
     array_return = []
-    for metadatas in client.listMetadataFormats():
-        array_return.append(metadatas[0])
+    try:
+        for metadatas in client.listMetadataFormats():
+            array_return.append(metadatas[0])
+    except (HTTPError, BadVerbError, URLError):
+        with open('./rejected_urls.txt', 'a') as reject:
+            reject.write(f'{url}\n')
     return array_return
 
 
@@ -22,12 +29,16 @@ def extract(url: str, output_file: str, metadata_format: str = "oai_dc") -> None
     with jsonlines.open(output_file, 'w') as f_out:
         registry=get_registry()
         client = Client(url, registry)
-
-        for record in tqdm(client.listRecords(metadataPrefix=metadata_format)):
-            if record[1] is not None:
-                data = record[1].getMap()
-                # fds
-                f_out.write(data)
+        try:
+            for record in tqdm(client.listRecords(metadataPrefix=metadata_format)):
+                if record[1] is not None:
+                    data = record[1].getMap()
+                    # fds
+                    f_out.write(data)
+        except (HTTPError, IncompleteRead, Error, URLError) as ee:
+            with open('./rejected_urls.txt', 'a') as reject:
+                reject.write(f'{url}\n')
+            print(f'Raised error: {ee}')
 
 
 mapping = {'urn:mpeg:mpeg21:2002:02-DIDL-NS http://standards.iso.org/ittf/PubliclyAvailableStandards/MPEG-21_schema_files/did/didl.xsd': 'didl',
@@ -40,7 +51,8 @@ reverse_mapping = {item: key for key, item in mapping.items()}
 
 
 def main(out_path: str):
-    a_list = ["https://mru.arcabc.ca/oai2",
+    a_list = [
+              "https://mru.arcabc.ca/oai2",
               "https://era.library.ualberta.ca/oai",
               "https://prism.ucalgary.ca/oai/request",
               "https://ecuad.arcabc.ca/oai2",

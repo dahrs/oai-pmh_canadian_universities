@@ -7,9 +7,11 @@ import six
 
 try:
     import urllib.request as urllib2
+    import urllib
     from urllib.parse import urlencode
 except ImportError:
     import urllib2
+    import urllib
     from urllib import urlencode
 
 import sys

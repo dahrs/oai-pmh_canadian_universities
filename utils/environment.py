@@ -5,6 +5,7 @@ from os import listdir
 from os import makedirs
 from os.path import isdir
 from os.path import isfile
+from typing import List, Tuple
 
 
 def url_2_path(a_url: str, dataset_dir: str = "./dataset/raw2") -> str:
@@ -72,7 +73,7 @@ def overwrite_check(out_p: str, s_url: str = "", format_type: str = "") -> bool:
 
 
 def get_files_paths(main_dir: str, name_elem_required: str = None, file_extension: [str, None] = None,
-                    go_recursive: bool = False) -> tuple[list, list]:
+                    go_recursive: bool = False) -> Tuple[List, List]:
     all_paths = [f"{main_dir}/{nn}" for nn in listdir(main_dir)]
     if name_elem_required:
         all_paths = [pp for pp in all_paths if name_elem_required in pp]
